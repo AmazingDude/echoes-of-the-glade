@@ -8,17 +8,36 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import static utils.Constants.PlayerState.*;
+import static utils.Constants.Direction.*;
+import static utils.Constants.*;
 
 public class GamePanel extends JPanel {
     private float xDelta = 100, yDelta = 100;
 
-    private BufferedImage img, subImg;
+    private BufferedImage img;
+    private BufferedImage[][] animations;
+    private int animTick, animIndex, animSpeed = 15; // animSpeed = FPS / number of animations per second?
+    private PlayerState playerAction = IDLE;
+    private Direction playerDirection = LEFT;
+    private boolean moving = false;
 
     // Constructor
     public GamePanel() {
         addKeyListener(new KeyboardInput(this));
         setPanelSize();
         importImg();
+        loadAnimations();
+    }
+
+    private void loadAnimations() {
+        animations = new BufferedImage[6][10];
+
+        for (int i = 0; i < animations.length; i++) {
+            for (int j = 0; j < animations[i].length; j++) {
+                animations[i][j] = img.getSubimage(i * 48, j * 48 , 48, 48);
+            }
+        }
     }
 
     // A method for importing images (sprites) to our gamePanel
@@ -29,45 +48,87 @@ public class GamePanel extends JPanel {
         } catch (IOException e) {
 //            throw new RuntimeException(e);
             e.printStackTrace();
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     // sets the Dimensions of the gamePanel
     private void setPanelSize() {
-        Dimension size = new Dimension(1280, 800);
+        Dimension size = new Dimension(1296, 720);
         setPreferredSize(size);
     }
 
-    // Changes x-position
-    public void changeXDelta(int pos) {
-        this.xDelta += pos;
+    // Changes Direction
+    public void setPlayerDirection(Direction playerDirection) {
+        this.playerDirection = playerDirection;
+        moving = true;
     }
 
-    public void changeYDelta(int pos) {
-        this.yDelta += pos;
+    public void setMoving(boolean moving) {
+        this.moving = moving;
     }
 
-    public void setPos(int x, int y) {
-        this.xDelta = x;
-        this.yDelta = y;
+    private void updateAnimationTick() {
+
+        animTick++;
+
+        if (animTick >= animSpeed) {
+            animTick = 0; // Resets the tick
+            animIndex++;
+            if (animIndex >= getSpriteAmount(playerAction)) {
+                animIndex = 0; // Resets the index
+            }
+        }
     }
+
+    private void setAnimation() {
+        if (moving) {
+            playerAction = RUNNING;
+        } else {
+            playerAction = IDLE;
+        }
+    }
+
+    private void updatePos() {
+        if (moving) {
+            switch (playerDirection) {
+                case DOWN:
+                    yDelta += 2;
+                    break;
+                case RIGHT:
+                    xDelta += 2;
+                    break;
+                case UP:
+                    yDelta -= 2;
+                    break;
+                case LEFT:
+                    xDelta -= 2;
+                    break;
+            }
+        }
+    }
+
     // A method that we never call, but it gets called whenever the game starts
-
     // We will use paintComponent method for JPanel and we will pass Graphics object as input
     // Graphics allows us to draw
-
     // The paintComponent method is a method provided by the JPanel class. It is automatically invoked whenever the panel needs to be redrawn, which happens when the window is resized, uncovered
     public void paintComponent(Graphics g) {
         // super keyword is used here to call the paintComponent of GamePanel's super class i-e JPanel. So basically we are calling JPanel's paintComponent method.
         // Calling this method is important because it clears the previous form so there won't be any visual artifacts
         super.paintComponent(g); // Ensures proper rendering setup
-
-        // Okay so we're creating sub-images from the main sprite atlas
-        // Since each sprite is 48 x 48 pixels in dimension, we can choose any one of them by multiplying the position or number with it's dimensions.
-        subImg = img.getSubimage(1 * 48, 2 * 48, 48, 48);
+        setAnimation();
+        updatePos();
+        updateAnimationTick();
         // Draws the sprite image
-        g.drawImage(subImg, (int) xDelta, (int) yDelta, 96, 96, null);
-
-//        repaint(); // Re-render
+        if (playerDirection == LEFT)
+            g.drawImage(animations[animIndex][getAnimationRow(playerAction, playerDirection)], (int) xDelta + 96, (int) yDelta, -96, 96, null);
+        else
+            g.drawImage(animations[animIndex][getAnimationRow(playerAction, playerDirection)], (int) xDelta, (int) yDelta, 96, 96, null);
     }
+
 }
