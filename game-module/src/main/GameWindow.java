@@ -4,6 +4,9 @@ package main;
 // We'll use JFrame for making our game window.
 
 import javax.swing.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
+import java.awt.event.WindowListener;
 
 public class GameWindow {
     private JFrame jframe;
@@ -19,5 +22,16 @@ public class GameWindow {
         jframe.pack(); // will fit the window size to the preferred size of components but the only component we have is GamePanel so it will fit the window to it's preferred size.
 //        jframe.setResizable(false);
         jframe.setVisible(true);
+        jframe.addWindowFocusListener(new WindowFocusListener() {
+            @Override
+            public void windowGainedFocus(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowLostFocus(WindowEvent e) {
+                gamePanel.getGame().windowFocusLost();
+            }
+        });
     }
 }
