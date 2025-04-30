@@ -1,5 +1,6 @@
 package utils;
 
+import entities.Entity;
 import main.Game;
 
 public class HelperMethods {
@@ -10,6 +11,7 @@ public class HelperMethods {
                     if (!isSolid(x, y + width, lvlData))
                         return true;
         return false;
+
     }
 
     private static boolean isSolid(float x, float y, int[][] lvlData) {

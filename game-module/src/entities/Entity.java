@@ -26,10 +26,10 @@ public abstract class Entity {
     }
 
     protected void updateHitBox() {
-//        hitBox.x = (int) x + 13;
-//        hitBox.y = (int) y + 26;
-        hitBox.x = (int) x;
-        hitBox.y = (int) y;
+        hitBox.x = (int) x + 13;
+        hitBox.y = (int) y + 26;
+//        hitBox.x = (int) x;
+//        hitBox.y = (int) y;
     }
 
     public Rectangle getHitBox() {

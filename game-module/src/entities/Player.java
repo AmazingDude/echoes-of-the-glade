@@ -119,7 +119,7 @@ public class Player extends Entity {
 
 
         if (dy != 0 || dx != 0) {
-            if (CanMoveHere(x + dx, y + dy, width, height, lvlData)) {
+            if (CanMoveHere(hitBox.x + dx, hitBox.y + dy, width, height, lvlData)) {
                 double length = Math.sqrt(dx * dx + dy * dy);
                 this.x += (playerSpeed * dx / length);
                 this.y += (playerSpeed * dy / length);
