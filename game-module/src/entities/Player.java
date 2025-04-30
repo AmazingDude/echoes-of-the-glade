@@ -11,6 +11,7 @@ import java.io.InputStream;
 
 import static utils.Constants.Direction.*;
 import static utils.Constants.PlayerState.*;
+import static utils.HelperMethods.CanMoveHere;
 import static utils.Constants.getAnimationRow;
 import static utils.Constants.getSpriteAmount;
 
@@ -23,9 +24,10 @@ public class Player extends Entity {
     private boolean up, right, down, left;
     private boolean attacking = false;
     private float playerSpeed = 2.0f;
+    private int[][] lvlData;
 
-    public Player(float x, float y) {
-        super(x, y);
+    public Player(float x, float y, int width, int height) {
+        super(x, y, width, height);
         loadAnimations();
     }
 
@@ -33,6 +35,7 @@ public class Player extends Entity {
         updateAnimationTick();
         setAnimation();
         updatePos();
+        updateHitBox();
     }
 
     public void render(Graphics g) {
@@ -40,6 +43,7 @@ public class Player extends Entity {
             g.drawImage(animations[animIndex][getAnimationRow(playerAction, playerDirection)], (int) x + 96, (int) y, -96, 96, null);
         else
             g.drawImage(animations[animIndex][getAnimationRow(playerAction, playerDirection)], (int) x, (int) y, 96, 96, null);
+        drawHitBox(g);
     }
 
 
@@ -83,6 +87,9 @@ public class Player extends Entity {
 
         int dx = 0, dy = 0;
 
+        if (!left && !right && !up && !down)
+            return;
+
         if (left && !right) {
 //            x -= playerSpeed;
             dx = -2;
@@ -109,11 +116,15 @@ public class Player extends Entity {
             playerDirection = DOWN;
         }
 
+
+
         if (dy != 0 || dx != 0) {
-            moving = true;
-            double length = Math.sqrt(dx * dx + dy * dy);
-            x += (playerSpeed * dx / length);
-            y += (playerSpeed * dy / length);
+            if (CanMoveHere(x + dx, y + dy, width, height, lvlData)) {
+                double length = Math.sqrt(dx * dx + dy * dy);
+                this.x += (playerSpeed * dx / length);
+                this.y += (playerSpeed * dy / length);
+                moving = true;
+            }
         }
     }
 
@@ -126,6 +137,10 @@ public class Player extends Entity {
                 animations[i][j] = img.getSubimage(i * 48, j * 48 , 48, 48);
             }
         }
+    }
+
+    public void loadLvlData(int[][] lvlData) {
+        this.lvlData = lvlData;
     }
 
     public void setAttacking(boolean attacking) {
