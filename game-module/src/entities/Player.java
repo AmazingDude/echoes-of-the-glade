@@ -1,5 +1,6 @@
 package entities;
 
+import main.Game;
 import utils.Constants;
 import utils.LoadSave;
 
@@ -25,24 +26,29 @@ public class Player extends Entity {
     private boolean attacking = false;
     private float playerSpeed = 2.0f;
     private int[][] lvlData;
+    private float xOffset = 25 * Game.SCALE;
+    private float yOffset = 30 * Game.SCALE;
 
     public Player(float x, float y, int width, int height) {
         super(x, y, width, height);
         loadAnimations();
+        initHitBox(x, y, 14 * Game.SCALE, 24 * Game.SCALE);
     }
 
     public void update() {
         updateAnimationTick();
         setAnimation();
         updatePos();
-        updateHitBox();
+//        updateHitBox();
     }
 
     public void render(Graphics g) {
         if (playerDirection == LEFT)
-            g.drawImage(animations[animIndex][getAnimationRow(playerAction, playerDirection)], (int) x + 96, (int) y, -96, 96, null);
+//            g.drawImage(animations[animIndex][getAnimationRow(playerAction, playerDirection)], (int) x + 96, (int) y, -96, 96, null);
+            g.drawImage(animations[animIndex][getAnimationRow(playerAction, playerDirection)], (int) (hitBox.x - xOffset) + 96, (int) (hitBox.y - yOffset), -96, 96, null);
         else
-            g.drawImage(animations[animIndex][getAnimationRow(playerAction, playerDirection)], (int) x, (int) y, 96, 96, null);
+//            g.drawImage(animations[animIndex][getAnimationRow(playerAction, playerDirection)], (int) x, (int) y, 96, 96, null);
+            g.drawImage(animations[animIndex][getAnimationRow(playerAction, playerDirection)], (int) (hitBox.x - xOffset), (int) (hitBox.y - yOffset), 96, 96, null);
         drawHitBox(g);
     }
 
@@ -121,8 +127,10 @@ public class Player extends Entity {
         if (dy != 0 || dx != 0) {
             if (CanMoveHere(hitBox.x + dx, hitBox.y + dy, width, height, lvlData)) {
                 double length = Math.sqrt(dx * dx + dy * dy);
-                this.x += (playerSpeed * dx / length);
-                this.y += (playerSpeed * dy / length);
+//                this.x += (playerSpeed * dx / length);
+//                this.y += (playerSpeed * dy / length);
+                hitBox.x += (playerSpeed * dx / length);
+                hitBox.y += (playerSpeed * dy / length);
                 moving = true;
             }
         }

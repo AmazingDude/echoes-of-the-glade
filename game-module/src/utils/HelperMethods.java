@@ -4,7 +4,7 @@ import entities.Entity;
 import main.Game;
 
 public class HelperMethods {
-    public static boolean CanMoveHere(float x, float y, int width, int height, int[][] lvlData) {
+    public static boolean CanMoveHere(float x, float y, float width, float height, int[][] lvlData) {
         if (!isSolid(x, y, lvlData))
             if (!isSolid(x + width, y + height, lvlData))
                 if (!isSolid(x + width, y, lvlData))
