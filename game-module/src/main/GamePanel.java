@@ -1,6 +1,7 @@
 package main;
 
 import inputs.KeyboardInput;
+import inputs.MouseInput;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -16,12 +17,17 @@ import static utils.Constants.Direction.*;
 import static utils.Constants.*;
 
 public class GamePanel extends JPanel {
-    // Constructor
+
+    private MouseInput mouseInputs;
     private Game game;
+    // Constructor
     public GamePanel(Game game)
     {
+        mouseInputs = new MouseInput(this);
         this.game = game;
         addKeyListener(new KeyboardInput(this));
+        addMouseListener(mouseInputs);
+        addMouseMotionListener(mouseInputs);
         setPanelSize();
     }
 

@@ -24,7 +24,7 @@ public class Player extends Entity {
     private boolean moving = false;
     private boolean up, right, down, left;
     private boolean attacking = false;
-    private float playerSpeed = 2.0f;
+    private float playerSpeed = 1.2f * Game.SCALE;
     private int[][] lvlData;
     private float xOffset = 25 * Game.SCALE;
     private float yOffset = 30 * Game.SCALE;
@@ -32,7 +32,7 @@ public class Player extends Entity {
     public Player(float x, float y, int width, int height) {
         super(x, y, width, height);
         loadAnimations();
-        initHitBox(x, y, 14 * Game.SCALE, 24 * Game.SCALE);
+        initHitBox(x, y, (int) (14 * Game.SCALE), (int) (24 * Game.SCALE));
     }
 
     public void update() {
@@ -125,7 +125,7 @@ public class Player extends Entity {
 
 
         if (dy != 0 || dx != 0) {
-            if (CanMoveHere(hitBox.x + dx, hitBox.y + dy, width, height, lvlData)) {
+            if (CanMoveHere(hitBox.x + dx, hitBox.y + dy, hitBox.width, hitBox.height, lvlData)) {
                 double length = Math.sqrt(dx * dx + dy * dy);
 //                this.x += (playerSpeed * dx / length);
 //                this.y += (playerSpeed * dy / length);

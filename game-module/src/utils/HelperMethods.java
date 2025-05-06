@@ -8,7 +8,7 @@ public class HelperMethods {
         if (!isSolid(x, y, lvlData))
             if (!isSolid(x + width, y + height, lvlData))
                 if (!isSolid(x + width, y, lvlData))
-                    if (!isSolid(x, y + width, lvlData))
+                    if (!isSolid(x, y + height, lvlData))
                         return true;
         return false;
 

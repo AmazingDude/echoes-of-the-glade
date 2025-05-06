@@ -1,6 +1,18 @@
 package utils;
 
+import main.Game;
+
 public class Constants {
+
+    public static class UI {
+        public static class Buttons {
+            public static final int BTN_DEFAULT_WIDTH = 140;
+            public static final int BTN_DEFAULT_HEIGHT = 56;
+            public static final int BTN_WIDTH = (int) (BTN_DEFAULT_WIDTH * Game.SCALE);
+            public static final int BTN_HEIGHT = (int) (BTN_DEFAULT_HEIGHT * Game.SCALE);
+        }
+    }
+
     public enum PlayerState {
         IDLE, RUNNING, ATTACKING, DYING;
     }
