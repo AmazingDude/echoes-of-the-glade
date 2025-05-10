@@ -4,6 +4,42 @@ import main.Game;
 
 public class Constants {
 
+    public static class EnemyConstants {
+        public static final int SLIME = 0;
+        public static final int IDLE = 1;
+        public static final int RUNNING = 2;
+        public static final int ATTACK = 3;
+        public static final int HIT = 4;
+        public static final int DEAD = 5;
+        public static final int SLIME_WIDTH_DEFAULT = 32;
+        public static final int SLIME_HEIGHT_DEFAULT = 32;
+        public static final int SLIME_WIDTH = (int) (SLIME_WIDTH_DEFAULT * Game.SCALE);
+        public static final int SLIME_HEIGHT = (int) (SLIME_HEIGHT_DEFAULT * Game.SCALE);
+
+        public static int getSpriteAmount(int enemyType, int enemyState) {
+            switch (enemyType) {
+                case SLIME:
+                    switch (enemyState) {
+                        case IDLE:
+                            return 4;
+                        case RUNNING:
+                            return 6;
+                        case ATTACK:
+                            return 7;
+                        case HIT:
+                            return 3;
+                        case DEAD:
+                            return 5;
+                    }
+            }
+            return 0;
+        }
+    }
+
+//    public enum EnemyConstants {
+//        SLIME, IDLE, RUNNING, ATTACKING, HIT, DEAD
+//    }
+
     public static class UI {
         public static class Buttons {
             public static final int BTN_DEFAULT_WIDTH = 140;

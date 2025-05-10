@@ -62,9 +62,10 @@ public class Menu extends State implements StateMethods{
     @Override
     public void mousePressed(MouseEvent e) {
         for (MenuButton mb : buttons) {
-            if (isIn(e, mb))
+            if (isIn(e, mb)) {
                 mb.setMousePressed(true);
                 break;
+            }
         }
     }
 
