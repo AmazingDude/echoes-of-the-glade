@@ -65,7 +65,7 @@ public class WaveManager {
         if (waveStarted) {
             timerText = "WAVE " + currentWave;
         } else {
-            timerText = "NEXT WAVE IN: " + (waveTimer / 60 + 1); // Convert frames to seconds
+            timerText = "NEXT WAVE IN: " + (waveTimer / 120 + 1); // Convert frames to seconds
         }
         
         int textWidth = g.getFontMetrics().stringWidth(timerText);

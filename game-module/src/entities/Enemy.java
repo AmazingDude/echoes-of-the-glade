@@ -29,8 +29,7 @@ public abstract class Enemy extends Entity {
 
         this.enemyType = enemyType;
         initHitBox(x, y, width, height);
-//        maxHealth = getMaxHealth(enemyType);
-        maxHealth = 10;
+        maxHealth = getMaxHealth(enemyType);
         currentHealth = maxHealth;
     }
 
@@ -38,8 +37,13 @@ public abstract class Enemy extends Entity {
         currentHealth -= damage;
         if (currentHealth <= 0) {
             enemyState = DEAD;
+            animIndex = 0; // start death animation from beginning
+            animTick = 0;
+            return;
         } else {
             enemyState = HIT;
+            animIndex = 0; // reset animation for hit
+            animTick = 0;
         }
     }
 
@@ -55,9 +59,7 @@ public abstract class Enemy extends Entity {
                     case HIT -> enemyState = IDLE;
                     case DEAD -> {
                         // Only set inactive after the full death animation has played
-                        if (animIndex == 0) {
-                            active = false;
-                        }
+                        active = false;
                     }
                 }
             }
@@ -66,6 +68,11 @@ public abstract class Enemy extends Entity {
 
     public void update() {
         updateAnimationTick();
+
+        if (enemyState == DEAD) {
+            return;
+        }
+
         updateEnemyPosition();
         attackPlayer();      // Call attackPlayer() before updateEnemyState() to prioritize attack state
         updateEnemyState();  // This will now only update state if not attacking
@@ -181,6 +188,10 @@ public abstract class Enemy extends Entity {
     }
 
     private void updateEnemyState() {
+        // Don't override HIT or DEAD state
+        if (enemyState == HIT || enemyState == DEAD)
+            return;
+
         // Only update state if not already in ATTACK state (attack state is handled in attackPlayer method)
         if (enemyState != ATTACK || distanceToPlayer > reachedPlayerThreshold) {
             if (!moving) {

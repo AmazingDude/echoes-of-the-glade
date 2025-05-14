@@ -23,6 +23,7 @@ public class Player extends Entity {
     private boolean moving = false;
     private boolean up, right, down, left;
     private boolean attacking = false;
+    private boolean attackChecked = false;
     private float playerSpeed = 1.2f * Game.SCALE;
     private int[][] lvlData;
     private float xOffset = 25 * Game.SCALE;
@@ -73,17 +74,16 @@ public class Player extends Entity {
 
         updateHealthBar();
         if (!isDying) {
-//            playing.getEnemyHandler().checkEnemyHit(attackBox);
             // Check for enemy hits when player is attacking
-            if (attacking) {
+            if (attacking && !attackChecked) {
                 playing.getEnemyHandler().checkEnemyHit(attackBox);
+                attackChecked = true;
             }
             updatePos();
             updateAttackBox();
         }
         updateAnimationTick();
         setAnimation();
-//        updateHitBox();
     }
 
     private void updateAttackBox() {
@@ -118,8 +118,10 @@ public class Player extends Entity {
         else
 //            g.drawImage(animations[animIndex][getAnimationRow(playerAction, playerDirection)], (int) x, (int) y, 96, 96, null);
             g.drawImage(animations[animIndex][getAnimationRow(playerAction, playerDirection)], (int) (hitBox.x - xOffset), (int) (hitBox.y - yOffset), 96, 96, null);
-        drawHitBox(g);
-        drawAttackBox(g);
+
+        // Draws Attack Box and HitBox for debugging purpose
+//        drawHitBox(g);
+//        drawAttackBox(g);
         drawUI(g);
     }
 
@@ -144,8 +146,10 @@ public class Player extends Entity {
             animIndex++;
             if (animIndex >= getSpriteAmount(playerAction)) {
                 animIndex = 0; // Resets the index
-                if (playerAction == ATTACKING)
+                if (playerAction == ATTACKING) {
                     attacking = false;
+                    attackChecked = false;
+                }
             }
         }
     }

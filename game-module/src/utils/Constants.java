@@ -86,9 +86,16 @@ public class Constants {
                         default: return 6;
                     }
                 case HIT:
-                    return 9; // Hit animation (row 9)
+                    switch (direction) {
+                        case DOWN: return 9;
+                        case RIGHT: return 10;
+                        case UP: return 11;
+                        case LEFT: return 10;
+                        default: return 9;
+                    }
+//                    return 9; // Hit animation (row 9)
                 case DEAD:
-                    return 10; // Death animation (row 10)
+                    return 12; // Death animation (row 10)
                 default:
                     return 0;
             }

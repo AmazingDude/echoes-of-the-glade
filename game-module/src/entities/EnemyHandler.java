@@ -172,7 +172,8 @@ public class EnemyHandler {
                             (int) (SLIME_HEIGHT * 1.5),
                             null);
                 }
-                g.drawRect((int) s.getHitBox().x, (int) s.getHitBox().y, (int) s.getHitBox().width, (int) s.getHitBox().height);
+                // Draws HitBox for debugging purpose
+//                g.drawRect((int) s.getHitBox().x, (int) s.getHitBox().y, (int) s.getHitBox().width, (int) s.getHitBox().height);
             }
         }
     }
@@ -180,8 +181,16 @@ public class EnemyHandler {
     // Checks if player's attackBox overlaps the enemy's hitBox
     public void checkEnemyHit(Rectangle2D.Float attackBox) {
         for (Slime s : slimes) {
+            if (!s.isActive()) continue;
+
+            // Skip if enemy is already reacting to a hit or is dead
+            if (s.getEnemyState() == DEAD || s.getEnemyState() == HIT) continue;
+
             if (attackBox.intersects(s.getHitBox())) {
-                s.hurt(9999);
+                if (s.getEnemyState() == DEAD || s.getEnemyState() == HIT) {
+                    return;
+                }
+                s.hurt(5);
                 return;
             }
         }
