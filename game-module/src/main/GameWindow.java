@@ -18,8 +18,8 @@ public class GameWindow {
         jframe.setSize(400, 400);
         jframe.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         jframe.add(gamePanel);
-        jframe.setLocationRelativeTo(null);
         jframe.pack(); // will fit the window size to the preferred size of components but the only component we have is GamePanel so it will fit the window to it's preferred size.
+        jframe.setLocationRelativeTo(null);
         jframe.setResizable(false);
         jframe.setVisible(true);
         jframe.addWindowFocusListener(new WindowFocusListener() {

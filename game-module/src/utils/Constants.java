@@ -6,15 +6,20 @@ public class Constants {
 
     public static class EnemyConstants {
         public static final int SLIME = 0;
+
         public static final int IDLE = 1;
         public static final int RUNNING = 2;
         public static final int ATTACK = 3;
         public static final int HIT = 4;
         public static final int DEAD = 5;
+
         public static final int SLIME_WIDTH_DEFAULT = 32;
         public static final int SLIME_HEIGHT_DEFAULT = 32;
         public static final int SLIME_WIDTH = (int) (SLIME_WIDTH_DEFAULT * Game.SCALE);
         public static final int SLIME_HEIGHT = (int) (SLIME_HEIGHT_DEFAULT * Game.SCALE);
+
+        public static final int SLIME_DRAW_OFFSET_X = (int) (26 * Game.SCALE); // Update Later!!
+        public static final int SLIME_DRAW_OFFSET_Y = (int) (9 * Game.SCALE); // Update Later!!
 
         public static int getSpriteAmount(int enemyType, int enemyState) {
             switch (enemyType) {
@@ -33,6 +38,60 @@ public class Constants {
                     }
             }
             return 0;
+        }
+
+        public static int getMaxHealth(int enemyType) {
+            switch (enemyType) {
+                case SLIME:
+                    return 10;
+                default:
+                    return 0;
+            }
+        }
+
+        public static int getEnemyDamage(int enemyType) {
+            switch (enemyType) {
+                case SLIME:
+                    return 15;
+                default:
+                    return 0;
+            }
+        }
+
+        // Maps EnemyState + Direction to animation row index
+        public static int getAnimationRow(int enemyState, Direction direction) {
+            switch (enemyState) {
+                case IDLE:
+                    switch (direction) {
+                        case DOWN: return 0;  // Idle Down (row 0)
+                        case RIGHT: return 1; // Idle Right (row 1)
+                        case UP: return 2;    // Idle Up (row 2)
+                        case LEFT: return 1;  // Idle Left → Use Right's animation (row 1)
+                        default: return 0;
+                    }
+                case RUNNING:
+                    switch (direction) {
+                        case DOWN: return 3;  // Running Down (row 3)
+                        case RIGHT: return 4; // Running Right (row 4)
+                        case UP: return 5;    // Running Up (row 5)
+                        case LEFT: return 4;  // Running Left → Use Right's animation (row 4)
+                        default: return 3;
+                    }
+                case ATTACK:
+                    switch (direction) {
+                        case DOWN: return 6;  // Attack Down (row 6)
+                        case RIGHT: return 7; // Attack Right (row 7)
+                        case UP: return 8;    // Attack Up (row 8)
+                        case LEFT: return 7;  // Attack Left → Use Right's animation (row 7)
+                        default: return 6;
+                    }
+                case HIT:
+                    return 9; // Hit animation (row 9)
+                case DEAD:
+                    return 10; // Death animation (row 10)
+                default:
+                    return 0;
+            }
         }
     }
 
