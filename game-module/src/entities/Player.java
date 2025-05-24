@@ -1,5 +1,6 @@
 package entities;
 
+import audio.AudioPlayer;
 import gamestates.Playing;
 import main.Game;
 import utils.Constants;
@@ -65,9 +66,11 @@ public class Player extends Entity {
     public void update() {
         if (currentHealth <= 0) {
             isDying = true;
+            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.DEATH_SOUND);
             // Only set game over after death animation completes
             if (playerAction == DYING && animIndex >= getSpriteAmount(DYING) - 1) {
                 playing.setGameOver(true);
+                playing.getGame().getAudioPlayer().playMusic(AudioPlayer.DEATH_MUSIC);
                 return;
             }
         }
@@ -76,6 +79,7 @@ public class Player extends Entity {
         if (!isDying) {
             // Check for enemy hits when player is attacking
             if (attacking && !attackChecked) {
+                playing.getGame().getAudioPlayer().playAttackSound();
                 playing.getEnemyHandler().checkEnemyHit(attackBox);
                 attackChecked = true;
             }
@@ -89,19 +93,19 @@ public class Player extends Entity {
     private void updateAttackBox() {
         // Horizontal attack direction
         if (right) {
-            attackBox.x = hitBox.x + hitBox.width + (int) (2 * Game.SCALE);
+            attackBox.x = hitBox.x + hitBox.width - (int) (4 * Game.SCALE);
             attackBox.y = hitBox.y + (6 * Game.SCALE);
         } else if (left) {
-            attackBox.x = hitBox.x - hitBox.width - (int) (8 * Game.SCALE);
+            attackBox.x = hitBox.x - hitBox.width - (int) (6 * Game.SCALE);
             attackBox.y = hitBox.y + (6 * Game.SCALE);
         }
 
         // Vertical attack direction
         if (up) {
-            attackBox.y = hitBox.y - hitBox.height + (int) (13 * Game.SCALE);
-            attackBox.x = hitBox.x - (3 * Game.SCALE);
+            attackBox.y = hitBox.y - hitBox.height + (int) (19 * Game.SCALE);
+            attackBox.x = hitBox.x - (5 * Game.SCALE);
         } else if (down) {
-            attackBox.y = hitBox.y + hitBox.height + (int) (2 * Game.SCALE);
+            attackBox.y = hitBox.y + hitBox.height - (int) (12 * Game.SCALE);
             attackBox.x = hitBox.x - (3 * Game.SCALE);
         }
     }

@@ -18,6 +18,7 @@ public class EnemyHandler {
     private BufferedImage[][] slimeArr;
     private ArrayList<Slime> slimes = new ArrayList<>();
     private Random random = new Random();
+    private static int enemyKillCount = 0; // Track all enemy kills
 
     public EnemyHandler(Playing playing) {
         this.playing = playing;
@@ -144,7 +145,6 @@ public class EnemyHandler {
 
     public void draw(Graphics g) {
         drawSlimes(g);
-
     }
 
     private void drawSlimes(Graphics g) {
@@ -194,6 +194,18 @@ public class EnemyHandler {
                 return;
             }
         }
+    }
+
+    public static int getEnemyKillCount() {
+        return enemyKillCount;
+    }
+
+    public static void incrementEnemyKillCount() {
+        enemyKillCount++;
+    }
+
+    public void resetKillCount() {
+        enemyKillCount = 0;
     }
 
     private void loadEnemyImgs() {

@@ -2,6 +2,7 @@ package entities;
 
 import gamestates.Playing;
 import main.Game;
+import utils.HelperMethods;
 
 import java.awt.*;
 
@@ -22,7 +23,8 @@ public class WaveManager {
     public WaveManager(Playing playing, EnemyHandler enemyHandler) {
         this.playing = playing;
         this.enemyHandler = enemyHandler;
-        timerFont = new Font("Arial", Font.BOLD, 30);
+//        timerFont = new Font("Arial", Font.BOLD, 30);
+        timerFont = HelperMethods.loadCustomFont("/Daydream.ttf", 20f);
     }
     
     public void update() {
@@ -59,7 +61,7 @@ public class WaveManager {
     public void draw(Graphics g) {
         // Draw wave timer at the top of the screen
         g.setFont(timerFont);
-        g.setColor(Color.WHITE);
+        g.setColor(Color.ORANGE);
         
         String timerText;
         if (waveStarted) {

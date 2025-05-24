@@ -6,7 +6,6 @@ package main;
 import javax.swing.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
-import java.awt.event.WindowListener;
 
 public class GameWindow {
     private JFrame jframe;
@@ -15,6 +14,7 @@ public class GameWindow {
 
         jframe = new JFrame();
 
+        jframe.setTitle("Echoes of the Glade");
         jframe.setSize(400, 400);
         jframe.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         jframe.add(gamePanel);
@@ -25,7 +25,7 @@ public class GameWindow {
         jframe.addWindowFocusListener(new WindowFocusListener() {
             @Override
             public void windowGainedFocus(WindowEvent e) {
-
+                gamePanel.requestFocusInWindow(); // Ensure GamePanel gets focus for keyboard input
             }
 
             @Override

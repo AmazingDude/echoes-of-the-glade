@@ -3,18 +3,11 @@ package main;
 import inputs.KeyboardInput;
 import inputs.MouseInput;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 
 import static main.Game.GAME_HEIGHT;
 import static main.Game.GAME_WIDTH;
-import static utils.Constants.PlayerState.*;
-import static utils.Constants.Direction.*;
-import static utils.Constants.*;
 
 public class GamePanel extends JPanel {
 

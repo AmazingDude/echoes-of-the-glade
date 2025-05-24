@@ -1,11 +1,13 @@
 package gamestates;
 
+import audio.AudioPlayer;
 import entities.EnemyHandler;
 import entities.Player;
 import entities.WaveManager;
 import levels.LevelHandler;
 import main.Game;
 import ui.GameOverOverlay;
+import utils.HelperMethods;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -18,6 +20,7 @@ public class Playing extends State implements StateMethods {
     private WaveManager waveManager;
     private boolean gameOver;
     private GameOverOverlay gameOverOverlay;
+    Font digitalDisco = HelperMethods.loadCustomFont("/DigitalDisco.ttf", 18f);
 
     public Playing(Game game) {
         super(game);
@@ -39,16 +42,13 @@ public class Playing extends State implements StateMethods {
 
     public void resetAll() {
         gameOver = false;
-
-        // Reset player
+        Player.updateHealth(Player.maxHealth);
         player = new Player(200, 200, (int) (48 * Game.SCALE), (int) (48 * Game.SCALE), this);
         player.loadLvlData(levelHandler.getCurrentLevel().getLevelData());
-
-        // Reset enemy handler
         enemyHandler = new EnemyHandler(this);
-
-        // Reset wave manager
+        enemyHandler.resetKillCount(); // Reset kill count
         waveManager = new WaveManager(this, enemyHandler);
+        game.getAudioPlayer().playMusic(AudioPlayer.MENU_MUSIC);
     }
 
     public Player getPlayer() {
@@ -87,6 +87,12 @@ public class Playing extends State implements StateMethods {
         levelHandler.draw(g);
         player.render(g);
         enemyHandler.draw(g);
+
+        // Draw overall enemy kill count
+        g.setColor(Color.WHITE);
+        g.setFont(digitalDisco);
+        String killText = "Kill Count: " + EnemyHandler.getEnemyKillCount();
+        g.drawString(killText, Game.GAME_WIDTH - 150, 30);
 
         if (!gameOver) {
             waveManager.draw(g);
@@ -157,6 +163,7 @@ public class Playing extends State implements StateMethods {
                     break;
                 case KeyEvent.VK_ESCAPE:
                     GameState.state = GameState.MENU;
+                    game.getAudioPlayer().playMusic(AudioPlayer.MENU_MUSIC);
             }
     }
 

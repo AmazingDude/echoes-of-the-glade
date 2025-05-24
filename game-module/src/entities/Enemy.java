@@ -59,6 +59,7 @@ public abstract class Enemy extends Entity {
                     case HIT -> enemyState = IDLE;
                     case DEAD -> {
                         // Only set inactive after the full death animation has played
+                        EnemyHandler.incrementEnemyKillCount();
                         active = false;
                     }
                 }

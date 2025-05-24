@@ -1,5 +1,6 @@
 package gamestates;
 
+import audio.AudioPlayer;
 import main.Game;
 import ui.MenuButton;
 import utils.LoadSave;
@@ -12,19 +13,20 @@ import java.awt.image.BufferedImage;
 public class Menu extends State implements StateMethods{
 
     private MenuButton[] buttons = new MenuButton[2];
-    private BufferedImage backgroundImg;
+    private BufferedImage backgroundImg, menuBackgroundImg;
     private int menuX, menuY, menuWidth, menuHeight;
 
     public Menu(Game game) {
         super(game);
         loadButtons();
         loadBackground();
+        menuBackgroundImg = LoadSave.getSpriteAtlas(LoadSave.MENU_BACKGROUND_IMG);
     }
 
     private void loadBackground() {
         backgroundImg = LoadSave.getSpriteAtlas(LoadSave.MENU_BACKGROUND);
-        menuWidth = (int) (backgroundImg.getWidth() * Game.SCALE);
-        menuHeight = (int) (backgroundImg.getHeight() * Game.SCALE);
+        menuWidth = (int) (backgroundImg.getWidth() * Game.SCALE) - 90;
+        menuHeight = (int) (backgroundImg.getHeight() * Game.SCALE) - 90;
         menuX = Game.GAME_WIDTH / 2 - menuWidth / 2;
         menuY = (int) (45 * Game.SCALE);
     }
@@ -48,6 +50,7 @@ public class Menu extends State implements StateMethods{
 
     @Override
     public void draw(Graphics g) {
+        g.drawImage(menuBackgroundImg, 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
         g.drawImage(backgroundImg, menuX, menuY, menuWidth, menuHeight, null);
         for (MenuButton mb : buttons) {
             mb.draw(g);
@@ -75,6 +78,8 @@ public class Menu extends State implements StateMethods{
             if (isIn(e, mb)) {
                 if (mb.isMousePressed())
                     mb.applyGameState();
+                if (mb.getGameState() == GameState.PLAYING)
+                    game.getAudioPlayer().playMusic(AudioPlayer.BACKGROUND_MUSIC);
                 break;
             }
         }
@@ -100,8 +105,10 @@ public class Menu extends State implements StateMethods{
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             GameState.state = GameState.PLAYING;
+            game.getAudioPlayer().playMusic(AudioPlayer.BACKGROUND_MUSIC);
+        }
     }
 
     @Override

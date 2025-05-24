@@ -1,12 +1,13 @@
 package main;
 
+import audio.AudioPlayer;
 import gamestates.GameState;
 import gamestates.Menu;
 import gamestates.Playing;
 
 import java.awt.Graphics;
 
-public class Game implements Runnable{
+public class Game implements Runnable {
     private GameWindow gameWindow;
     private GamePanel gamePanel;
     private Thread gameLoopThread;
@@ -15,6 +16,7 @@ public class Game implements Runnable{
 
     private Playing playing;
     private Menu menu;
+    private AudioPlayer audioPlayer;
 
     public final static int TILES_DEFAULT_SIZE = 32;
     public final static float SCALE = 1.5f;
@@ -32,11 +34,11 @@ public class Game implements Runnable{
         gameWindow = new GameWindow(gamePanel);
         gamePanel.requestFocus(); // For input focus
 
-
         startGameLoop(); // Calling this method will start the thread
     }
 
     private void initClasses() {
+        audioPlayer = new AudioPlayer();
         menu = new Menu(this);
         playing = new Playing(this);
     }
@@ -133,5 +135,9 @@ public class Game implements Runnable{
 
     public Playing getPlaying() {
         return playing;
+    }
+
+    public AudioPlayer getAudioPlayer() {
+        return audioPlayer;
     }
 }
