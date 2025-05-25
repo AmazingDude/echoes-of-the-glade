@@ -12,12 +12,16 @@ public class AudioPlayer {
 
     public static int ATTACK_SOUND = 0;
     public static int DEATH_SOUND = 1;
+    public static int HIT_SOUND = 2;
+    public static int MOVE_SOUND = 3;
 
     private Clip[] music, effects;
     private int currentMusicID;
     private float volume = 0.8F;
     private boolean musicMute, effectMute;
-    private Random rand = new Random();
+
+    // Track if move sound is currently playing
+    private boolean moveSoundPlaying = false;
 
     public AudioPlayer () {
         loadMusic();
@@ -34,7 +38,7 @@ public class AudioPlayer {
     }
 
     private void loadEffects() {
-        String[] names = {"attack_sound", "death_sound"};
+        String[] names = {"attack_sound", "death_sound", "hit", "walk"};
         effects = new Clip[names.length];
         for (int i = 0; i < names.length; i++) {
             effects[i] = getClip(names[i]);
@@ -84,14 +88,6 @@ public class AudioPlayer {
         this.music[currentMusicID].setMicrosecondPosition(0);
         this.music[currentMusicID].loop(Clip.LOOP_CONTINUOUSLY);
     }
-//    public void toggleEffectsMute () {
-//        effectMute = !effectMute;
-//        for (Clip clip : effects) {
-//            BooleanControl booleanControl = (BooleanControl) clip.getControl(BooleanControl.Type.MUTE);
-//            booleanControl.setValue(effectMute);
-//        }
-//
-//    }
 
     private void updateMusicVol () {
         FloatControl gainControl = (FloatControl) music[currentMusicID].getControl(FloatControl.Type.MASTER_GAIN);
@@ -106,6 +102,23 @@ public class AudioPlayer {
             float range = gainControl.getMaximum() - gainControl.getMinimum();
             float gain = (range * volume) + gainControl.getMinimum();
             gainControl.setValue(gain);
+        }
+    }
+
+    public void playMoveSound() {
+        if (!moveSoundPlaying) {
+            Clip moveClip = effects[MOVE_SOUND];
+            moveClip.setMicrosecondPosition(0);
+            moveClip.loop(Clip.LOOP_CONTINUOUSLY);
+            moveSoundPlaying = true;
+        }
+    }
+
+    public void stopMoveSound() {
+        if (moveSoundPlaying) {
+            Clip moveClip = effects[MOVE_SOUND];
+            moveClip.stop();
+            moveSoundPlaying = false;
         }
     }
 }

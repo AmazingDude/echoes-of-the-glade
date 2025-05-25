@@ -64,6 +64,12 @@ public class Player extends Entity {
     private boolean isDying = false;
 
     public void update() {
+        // Play or stop move sound based on moving state
+        if (moving) {
+            playing.getGame().getAudioPlayer().playMoveSound();
+        } else {
+            playing.getGame().getAudioPlayer().stopMoveSound();
+        }
         if (currentHealth <= 0) {
             isDying = true;
             playing.getGame().getAudioPlayer().playEffect(AudioPlayer.DEATH_SOUND);
@@ -215,6 +221,7 @@ public class Player extends Entity {
                 hitBox.x += (playerSpeed * dx / length);
                 hitBox.y += (playerSpeed * dy / length);
                 moving = true;
+
             }
         }
     }

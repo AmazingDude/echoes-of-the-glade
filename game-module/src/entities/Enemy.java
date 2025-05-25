@@ -1,4 +1,5 @@
 package entities;
+import audio.AudioPlayer;
 import gamestates.Playing;
 import main.Game;
 import utils.Constants;
@@ -39,12 +40,14 @@ public abstract class Enemy extends Entity {
             enemyState = DEAD;
             animIndex = 0; // start death animation from beginning
             animTick = 0;
+
             return;
         } else {
             enemyState = HIT;
             animIndex = 0; // reset animation for hit
             animTick = 0;
         }
+        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT_SOUND);
     }
 
     private void updateAnimationTick() {
