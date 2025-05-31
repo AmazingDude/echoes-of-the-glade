@@ -17,7 +17,7 @@ public class AudioPlayer {
 
     private Clip[] music, effects;
     private int currentMusicID;
-    private float volume = 0.8F;
+    private float volume = 1F;
     private boolean musicMute, effectMute;
 
     // Track if move sound is currently playing
